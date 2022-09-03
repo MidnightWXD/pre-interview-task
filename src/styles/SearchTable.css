@@ -1,0 +1,14 @@
+.delete-btn {
+    position: absolute;
+    left: 0;
+    margin-bottom: 5px;
+}
+
+.search-table {
+    width: 40vw;
+    height: 60vh;
+    overflow: auto;
+    margin-top: 15vh;
+    margin-left: 5vw;
+    position: relative;
+}
