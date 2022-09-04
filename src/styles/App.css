@@ -53,11 +53,19 @@
   top: 120px;
   width: 50vw;
   text-align: left;
-  z-index: 1;
+  z-index: 2;
 }
 
 .dropDown-list{
   background-color: white;
   padding: .75rem;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
+}
+
+.time-container {
+  position: absolute;
+  width: 50vw;
+  top:83vh;
+  text-align: center;
+  z-index: 1;
 }

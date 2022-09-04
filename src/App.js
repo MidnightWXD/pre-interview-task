@@ -60,18 +60,34 @@ function App() {
 
   const [currentTime, setCurrentTime] = useState(null);
 
+  function getTimezone(lat, lng) {  
+    let myDate = new Date('1/1/1970');
+    let timeStamp = myDate.getTime();
+    var url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timeStamp}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        setTimeZone(data.timeZoneName);
+        // setCurrentTime(data.timeZoneName);
+        setCurrentTime(getLocalTime(data.rawOffset));
+        console.log(data);
+      });
+  }
+
+  function getLocalTime(offset) {
+    var d = new Date();
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    var nd = new Date(utc + (3600000*offset));
+    return nd.toLocaleString();
+  }
+
+
   function userPosition() {
     navigator.geolocation.getCurrentPosition(function(position) {
       console.log(position);
       reverseGeocode(position.coords.latitude, position.coords.longitude); 
       map.panTo({lat: position.coords.latitude, lng: position.coords.longitude});
-      const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${position.coords.latitude}&lon=${position.coords.longitude}&exclude=hourly,minutely&appid=14bc867c043fde0bb3bdc169e6907127`;
-      fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setTimeZone(data.timezone);
-        });     
+      getTimezone(position.coords.latitude, position.coords.longitude);
     });
   }
 
@@ -88,8 +104,9 @@ function App() {
   async function getPosition(value) {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
-    console.log(latLng);
+    console.log(results);
     dispatch({ type: ACTIONS.ADD_LOCATION, payload: { location: value, lat: latLng.lat, lng: latLng.lng } });
+    getTimezone(latLng.lat, latLng.lng)
     map.panTo({lat: latLng.lat, lng: latLng.lng});
     setAddress('');
   }
@@ -131,7 +148,8 @@ function App() {
       </div>
       <Button type="primary" className='user-position-button' onClick={userPosition}><span><EnvironmentTwoTone style={{fontSize: '30px'}}/></span> </Button>
       <div className='time-container'>
-        <h1>{timeZone}</h1>
+        <h1>{timeZone? <span>Last Searched Location Time Zone:</span> : ''} {timeZone}</h1>
+        <h1>{currentTime? <span>Last Searched Location Time:</span> : ''} {currentTime}</h1>
       </div>
       <SearchTable state={state} dispatch={dispatch}/>
       <div className='map'>

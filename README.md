@@ -28,3 +28,7 @@ Your app is ready to be deployed!
 
 ## Notice
 You need to create a file named `.env.local` which located at root folder. In this file you should type:  REACT_APP_GOOGLE_MAPS_API_KEY="YOUR-GOOGLE-MAP-API-KEY-HERE"
+
+## Website short cut
+
+![Fullsize webpage](./src/img/Web-page.png)
