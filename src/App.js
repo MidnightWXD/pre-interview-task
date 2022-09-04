@@ -6,6 +6,7 @@ import { EnvironmentTwoTone } from '@ant-design/icons';
 import PlacesAutoComplete, { geocodeByAddress, getLatLng} from 'react-places-autocomplete';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 
+
 const { Search } = Input;
 
 const libraries = ["places"];
@@ -55,10 +56,22 @@ function App() {
 
   const [map, setMap] = useState(null);
 
+  const [timeZone, setTimeZone] = useState(null);
+
+  const [currentTime, setCurrentTime] = useState(null);
+
   function userPosition() {
     navigator.geolocation.getCurrentPosition(function(position) {
+      console.log(position);
       reverseGeocode(position.coords.latitude, position.coords.longitude); 
-      map.panTo({lat: position.coords.latitude, lng: position.coords.longitude});     
+      map.panTo({lat: position.coords.latitude, lng: position.coords.longitude});
+      const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${position.coords.latitude}&lon=${position.coords.longitude}&exclude=hourly,minutely&appid=14bc867c043fde0bb3bdc169e6907127`;
+      fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setTimeZone(data.timezone);
+        });     
     });
   }
 
@@ -75,6 +88,7 @@ function App() {
   async function getPosition(value) {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
+    console.log(latLng);
     dispatch({ type: ACTIONS.ADD_LOCATION, payload: { location: value, lat: latLng.lat, lng: latLng.lng } });
     map.panTo({lat: latLng.lat, lng: latLng.lng});
     setAddress('');
@@ -116,6 +130,9 @@ function App() {
         </PlacesAutoComplete>
       </div>
       <Button type="primary" className='user-position-button' onClick={userPosition}><span><EnvironmentTwoTone style={{fontSize: '30px'}}/></span> </Button>
+      <div className='time-container'>
+        <h1>{timeZone}</h1>
+      </div>
       <SearchTable state={state} dispatch={dispatch}/>
       <div className='map'>
         <GoogleMap mapContainerStyle={mapContainerStyle} zoom={10} center={center} onLoad={map => setMap(map)}>
