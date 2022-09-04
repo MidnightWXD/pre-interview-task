@@ -2,46 +2,42 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Button, Table } from 'antd';
 import "../styles/SearchTable.css";
-import { Input } from 'antd';
+import { ACTIONS } from '../App.js';
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'Location',
+    dataIndex: 'location',
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
+    title: 'Latitude',
+    dataIndex: 'latitude',
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
+    title: 'Longitude',
+    dataIndex: 'longitude',
   },
 ];
-const data = [];
 
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
-
-
-const SearchTable = () => {
+const SearchTable = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const data = [];
 
-  const start = () => {
-    setLoading(true); // ajax request after empty completing
+  for (let i = 0; i < props.state.length; i++) {
+    data.push({
+      key: props.state[i].id,
+      location: props.state[i].location,
+      latitude: props.state[i].lat,
+      longitude: props.state[i].lng,
+    });
+  }
 
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
+  function handleDeleteLocation () {
+    selectedRowKeys.forEach((key) => {
+      props.dispatch({type: ACTIONS.REMOVE_LOCATION, payload: { id: key }});
+    });
+    console.log(selectedRowKeys);
+  }
 
   const onSelectChange = (newSelectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -60,7 +56,7 @@ const SearchTable = () => {
           marginBottom: 16,
         }}
       >
-        <Button type="primary" onClick={start} danger className = "delete-btn">
+        <Button type="primary" onClick={handleDeleteLocation} danger className = "delete-btn">
           Delete selected
         </Button>
         <span

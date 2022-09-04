@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  position: relative;
 }
 
 .App-header {
@@ -14,18 +15,17 @@
 }
 
 .search-bar {
-  position: relative;
+  position: absolute;
+  left: 25vw;
   width: 50vw;
-  height: 50px;
-  margin-top: 15vh;
-  margin-left: 10px;
+  top: 80px;
 }
 
 .user-position-button {
-  position: relative;
-  margin-top: 14.2vh;
+  position: absolute;
+  left: 77vw;
+  top: 80px;
   height: 40px;
-  padding-bottom: 0;
 }
 
 .map {
@@ -40,8 +40,24 @@
 }
 
 .searchbar-container{
-  display: flex;
+  position: relative;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+
+.dropDown-list-container{
+  position: absolute;
+  left: 25vw;
+  top: 120px;
+  width: 50vw;
+  text-align: left;
+  z-index: 1;
+}
+
+.dropDown-list{
+  background-color: white;
+  padding: .75rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
 }

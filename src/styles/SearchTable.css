@@ -5,10 +5,11 @@
 }
 
 .search-table {
-    width: 40vw;
     height: 60vh;
-    overflow: auto;
-    margin-top: 15vh;
-    margin-left: 5vw;
-    position: relative;
+    width: 40vw;
+    float: left;
+    position: absolute;
+    left: 5vw;
+    top: 30vh;
+    margin-right: 2vh;
 }
